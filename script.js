@@ -67,9 +67,16 @@ function GameController(){
 
     const getSymbol = (row, column) => board.getBoard()[row][column].getValue();
 
+    let endMessage = "";
+
     const endGame = () => {
         board.newBoard();
-        console.log(activePlayer.name+" wins!")
+        endMessage = activePlayer.name+" wins!"
+        activePlayer = players[1];
+    }
+    const tieGame = () => {
+        board.newBoard();
+        endMessage = "It's a tie!"
         activePlayer = players[1];
     }
 
@@ -98,8 +105,20 @@ function GameController(){
         if(matchThree(getSymbol(0,2),getSymbol(1,1),getSymbol(2,0)) && getSymbol(0,2)){
             endGame();
         }
+        let allFilled = true;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if(!getSymbol(i,j)) allFilled = false;
+            }
+        }
+        if(allFilled){
+            tieGame();
+        }
         
     }
+
+    const getEnd = () => endMessage;
+    const setEnd = (end) => endMessage = end;
 
     const playRound = (row,column) => {
         if(getSymbol(row,column)) return;
@@ -109,9 +128,13 @@ function GameController(){
         winCon();
         switchTurn();
     }
+    const getPlayer = () => activePlayer;
     return{
         playRound,
-        getBoard: board.getBoard
+        getBoard: board.getBoard,
+        getPlayer,
+        getEnd,
+        setEnd
     }
 }
 
@@ -129,6 +152,12 @@ function ScreenController(){
     const updateScreen = () => {
         const board = game.getBoard();
         const boardDiv = document.querySelector(".board");
+        const info = document.querySelector(".info");
+
+        info.innerHTML = game.getEnd() ? game.getEnd()+"</br>"+game.getPlayer().name+"'s turn" : game.getPlayer().name+"'s turn";
+        if (game.getEnd) {
+            game.setEnd("");
+        }
 
         boardDiv.innerText = "";
 
