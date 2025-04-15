@@ -38,3 +38,8 @@ body{
     background-color: white;
     font-size: 6rem;
 }
+form{
+    display: flex;
+    flex-direction: column;
+    gap:15px;
+}

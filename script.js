@@ -47,17 +47,29 @@ function Cell(){
 
 function GameController(){
     const board = Gameboard();
+    const dialog = document.querySelector("#names");
+    const start = document.querySelector("#start");
+    const nameForm = document.querySelector("#nameForm");
+    dialog.showModal();
+
 
     const players = [
         {
-            name: "Player One",
+            name: "X",
             symbol: "X"
         },
         {
-            name: "Player Two",
+            name: "O",
             symbol: "O"
         }
     ];
+    start.addEventListener("click", () => {
+        event.preventDefault();
+        players[0].name = nameForm.p1name.value;
+        players[1].name = nameForm.p2name.value;
+        dialog.close();
+        game.updateScreen();
+    });
 
     let activePlayer = players[0];
 
@@ -175,7 +187,9 @@ function ScreenController(){
 
     }
     updateScreen();
-
+    return{
+        updateScreen
+    }
     
 }
 
